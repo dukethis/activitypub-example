@@ -1,7 +1,7 @@
 import json
 
 from django.db.models import Model, ForeignKey, CharField, TextField, BooleanField
-from django.db.models import BinaryField, DateField, ManyToManyField
+from django.db.models import BinaryField, DateField, ManyToManyField, CASCADE, DO_NOTHING
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -61,7 +61,7 @@ class Note(Model):
     ap_id   = TextField(null=True)
     remote  = BooleanField(default=False)
 
-    person  = ForeignKey(Person, related_name='notes')
+    person  = ForeignKey(Person, related_name='notes', on_delete=CASCADE)
     content = CharField(max_length=500)
     likes   = ManyToManyField(Person, related_name='liked')
 
@@ -86,7 +86,7 @@ class Activity(Model):
     ap_id      = TextField()
     payload    = BinaryField()
     created_at = DateField(auto_now_add=True)
-    person     = ForeignKey(Person, related_name='activities')
+    person     = ForeignKey(Person, related_name='activities', on_delete=CASCADE)
     remote     = BooleanField(default=False)
 
     @property
